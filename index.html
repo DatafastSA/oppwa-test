@@ -1,33 +1,304 @@
-<!DOCTYPE html>
 
-<html lang="en">
 
+<html>
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Static Template</title>
+
+    <title>
+        Static Template
+    </title>
+
     <style>
         body {
             background-color: white;
         }
     </style>
+
 </head>
 <body>
-<form
-        action="https://tenten.datafast.com.ec/"
-        class="paymentWidgets wpwl-form-card"
-        data-brands="VISA MASTER AMEX"
-></form>
-<script src="https://eu-test.oppwa.com/v1/paymentWidgets.js?checkoutId=6ED5EE9DD6CA683BED3D311B38AB1283.uat01-vm-tx01"></script>
+<script  src="https://developers.datafast.com.ec/js/jquery-3.6.0.min.js" ></script>
+</form>
+<script id="df-script" src="https://test.oppwa.com/v1/paymentWidgets.js?checkoutId=6A15D9B6A28048BB553B6C5229017BFD.uat01-vm-tx02"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-    var wpwlOptions = {
-        style: "card"
+    let formStyle = {
+        'background': '#F0F3F5',
+    };
+    let inputsStyle={
+        'font-family':'Roboto',
+        'font-size': '19px',
+
+    }
+    let labelStyle={
+        'font-family':'Roboto',
+        'font-size': '19px',
+    }
+    let buttonStyle={
+        'margin-top':'40px',
+        'margin-bottom':'10px',
+        'width':'206px',
+        'height':'48px',
+        'border-color':'#004D71',
+        'background': '#004D71',
+    };
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id')
+        const checkoutId = document.getElementById('checkoutId');
+        const statusDiv = document.getElementById('titleStatus');
+        checkoutId.textContent = urlParams.get("resourcePath");
+        statusDiv.textContent = "Get Status : " + id;
+        const form = document.querySelector('form.paymentWidgets'); // Reemplaza con el selector adecuado para tu formulario
+
+        if (form) {
+            form.action = window.location.href;
+        }
+        if (id){
+            form.remove();
+        }
+
+    });
+
+    function getStatus() {
+
+        const checkoutId = document.getElementById('checkoutId').textContent;
+
+        axios.request({
+            url: `https://test.oppwa.com/${checkoutId}?entityId=8ac7a4c98a46a5f4018a487789e701ec`,
+            method: "get",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                "Authorization":"Bearer OGE4Mjk0MTg1YTY1YmY1ZTAxNWE2YzhjNzI4YzBkOTV8YmZxR3F3UTMyWA=="
+            },
+
+        })
+            .then(function (response) {
+
+                const statusDiv = document.getElementById('status');
+
+                statusDiv.textContent = 'Respuesta de la solicitud POST: \n ' + JSON.stringify(response.data);
+            })
+            .catch(function (error) {
+                console.error('Error en la solicitud:', error);
+            });
+    }
+
+    function getForm(){
+        const lastForm = document.querySelector('form.paymentWidgets'); // Reemplaza con el selector adecuado para tu formulario
+        if(lastForm)
+            lastForm.remove()
+        const form = document.createElement('form');
+        form.action = window.location.href; // Reemplaza con la URL adecuada
+        form.className = 'paymentWidgets'; // Agrega la clase 'paymentWidgets'
+        form.setAttribute('data-brands', 'VISA MASTER AMEX DISCOVER');
+        document.body.appendChild(form);
+
+    }
+
+    function generateId() {
+        history.replaceState({}, document.title, window.location.pathname);
+
+        console.log(window.location)
+        console.log("holi")
+        const id = `3737d14b-b239-436c-af4c-${Date.now().toString()}`
+        const params = new URLSearchParams();
+        params.append('recurringType', 'INITIAL');
+        params.append('amount', '33.60');
+        params.append('billing.country', 'EC');
+        params.append('billing.street1', 's25 av solanda oe4490 y oe4r, solanda, quito');
+        params.append('billing.postcode', '170409');
+        params.append('cart.items[0].name', 'POS Inalámbrico');
+        params.append('cart.items[0].price', '15.00');
+        params.append('cart.items[0].quantity', '1');
+        params.append('cart.items[0].description', 'POS Inalámbrico');
+        params.append('cart.items[1].name', 'Datamóvil');
+        params.append('cart.items[1].price', '5.00');
+        params.append('cart.items[1].quantity', '1');
+        params.append('cart.items[1].description', 'Datamóvil');
+        params.append('cart.items[2].name', 'POS Dial / LAN');
+        params.append('cart.items[2].price', '10.00');
+        params.append('cart.items[2].quantity', '1');
+        params.append('cart.items[2].description', 'POS Dial / LAN');
+        params.append('currency', 'USD');
+        params.append('customer.surname', 'DIAZ PONCE');
+        params.append('customer.phone', '996114233');
+        params.append('customer.email', 'jppineda1@espe.edu.ec');
+        params.append('customer.ip', '0:0:0:0:0:0:0:1');
+        params.append('customer.middleName', 'RENE');
+        params.append('customer.givenName', 'HUGO');
+        params.append('customer.identificationDocId', '1706282496');
+        params.append('customer.identificationDocType', 'IDCARD');
+        params.append('customer.merchantCustomerId', '1706282496001');
+        params.append('customParameters[SHOPPER_VERSIONDF]', '2');
+        params.append('customParameters[SHOPPER_PSERV]', '17913101');
+        params.append('customParameters[SHOPPER_VAL_BASE0]', '0.00');
+        params.append('customParameters[SHOPPER_VAL_BASEIMP]', '30.00');
+        params.append('customParameters[SHOPPER_VAL_IVA]', '3.60');
+        params.append('customParameters[SHOPPER_ECI]', '0103910');
+        params.append('customParameters[SHOPPER_MID]', '1000000505');
+        params.append('entityId', '8ac7a4c98a46a5f4018a487789e701ec');
+        params.append('merchantTransactionId', id);
+        params.append('shipping.country', 'EC');
+        params.append('shipping.street1', 's25 av solanda oe4490 y oe4r, solanda, quito');
+        params.append('risk.parameters[USER_DATA2]', 'Sismetic');
+        params.append('testMode', 'EXTERNAL');
+
+
+
+
+
+        axios.request({
+            url: 'https://test.oppwa.com/v1/checkouts',
+            method: "post",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                "Authorization":"Bearer OGE4Mjk0MTg1YTY1YmY1ZTAxNWE2YzhjNzI4YzBkOTV8YmZxR3F3UTMyWA=="
+            },
+            data:params.toString()
+
+        })
+            .then(function (response) {
+
+                const resultadoDiv = document.getElementById('response');
+                const checkoutId = document.getElementById('checkoutId');
+                const titleStatusDiv = document.getElementById('titleStatus');
+                const status = document.getElementById('status');
+
+
+                const newScript = document.createElement('script');
+
+                newScript.setAttribute('src', `https://test.oppwa.com/v1/paymentWidgets.js?checkoutId=${response.data.id}`);
+                newScript.setAttribute('id', 'df-script');
+                getForm();
+
+                // Obtén el script actual
+                const currentScript = document.getElementById('df-script');
+
+                // Reemplaza el script actual con el nuevo script
+                currentScript.parentNode.replaceChild(newScript, currentScript);
+                checkoutId.textContent = response.data.id
+                titleStatusDiv.textContent = "Get Status : " + response.data.id
+                status.textContent = ""
+
+
+                resultadoDiv.textContent = 'Respuesta de la solicitud POST: \n ' + JSON.stringify(response.data);
+            })
+            .catch(function (error) {
+                console.error('Error en la solicitud:', error);
+            });
+    }
+</script>
+<script>
+
+    try {
+        var wpwlOptions = {
+            brandDetection: true,
+            brandDetectionType: "binlist",
+            brandDetectionPriority:  [
+                "VISA",
+                "VISADEBIT",
+                "VISAELECTRON",
+                "MASTER",
+                "MASTERDEBIT",
+                "AMEX" ,
+                "DISCOVER",
+                "DINERS",
+                "MAESTRO"
+            ],
+            iframeStyles: {
+                'card-number-placeholder': inputsStyle,
+                'cvv-placeholder': inputsStyle
+            },
+            imageStyle: "svg",
+            onReady:  (_onReady) => {
+                try {
+
+                    let datafast =
+                        "<br/><br/><img src=" +
+                        '"https://www.datafast.com.ec/images/verified.png"" style=' +
+                        '"display:block;margin:0 auto; width:100%;">';
+                    let form = $('form.wpwl-form-card');
+                    let button = form.find('.wpwl-button');
+                    let labels = form.find('.wpwl-label');
+                    let inputs = form.find('input');
+                    let brands = form.find('.wpwl-control-brand');
+                    let labelBrand = form.find('.wpwl-label-brand');
+
+                    labelBrand.hide();
+                    brands.hide();
+                    button.before(datafast);
+
+                    form.css(formStyle);
+                    button.css(buttonStyle);
+                    inputs.css(inputsStyle);
+                    labels.css(labelStyle);
+
+                }catch (e){
+                    console.error("error Form Ready:",e)
+                }
+
+            },
+            style: "card",
+            locale: "es",
+            maskCvv: true,
+            brandDetection: true,
+            labels: {
+                cvv: "CVV",
+                cardHolder: "Nombre(Igual que en la tarjeta)"
+            },
+            registration:{
+                requireCvv:true,
+                hideInitialPaymentForms:true,
+
+            },
+            onBeforeSubmitCard: ()=>{
+                try {
+                    let error=$(".wpwl-control-cardHolder").val()===""
+                    if(error){
+                        $(".wpwl-control-cardHolder").addClass("wpwl-has-error");
+                        $(".wpwl-control-cardHolder")
+                            .after(`
+                    <div  class="wpwl-hint-cardHolderError" style="color: #a94442;">
+                    Nombre TarjetaHabiente vacio
+                    </div>
+                `);
+                        $(".wpwl-button-pay").addClass("wpwl-button-error").attr("disabled", "disabled");
+                    }
+                    return !error;
+                } catch(e){
+                    console.error("Error Form Customize:",e);
+                }
+
+            }
+
+        };
+        if(wpwlOptions)
+            console.info("Form DF Customize Ready")
+
+    } catch (e){
+        console.error("Form DF Error",e)
     }
 </script>
 
-<script type="text/javascript" src="https://developers.datafast.com.ec/js/jquery-3.6.0.min.js"></script>
+<button onclick="generateId()">
+    Generar Checkout
+</button>
+<button onclick="getStatus()">
+    Validar Status
+</button>
+<div id="checkoutId"></div>
+<div>New Checkout id</div>
+<div style="background: aqua" id="response"></div>
+<div id="titleStatus">Get Status :</div>
+
+<div style="background: green" id="status"></div>
+
+
+
 
 </body>
+
 </html>
